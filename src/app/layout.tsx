@@ -24,6 +24,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* PWA Manifest */}
+        <link rel="manifest" href="/manifest.json" />
+
+        {/* Theme Color for mobile browsers */}
+        <meta name="theme-color" content="#000000" />
+        
+        {/* Apple icons (optional, but recommended for iOS) */}
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
