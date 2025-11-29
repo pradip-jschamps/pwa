@@ -7,7 +7,7 @@ export async function subscribeUser() {
 
   const reg = await navigator.serviceWorker.ready;
 
-  // ⛔ VERY IMPORTANT — check existing subscription
+  //  VERY IMPORTANT — check existing subscription
   const existing = await reg.pushManager.getSubscription();
   if (existing) {
     console.log("Already subscribed");

@@ -10,13 +10,7 @@ export default function Home() {
   return (
     <div>
       <p>Your PWA is Ready</p>
-      {/* <button
-        onClick={async () => {
-          await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_API}send-notification`, { method: "POST" });
-        }}
-      >
-        Send Push
-      </button> */}
+      
     </div>
   );
 }
