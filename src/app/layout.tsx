@@ -31,7 +31,6 @@ export default function RootLayout({
         {/* Theme Color for mobile browsers */}
         <meta name="theme-color" content="#000000" />
         
-        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
         <link rel="icon" href="/icons/icon-192.png" />
       </head>
       <body
