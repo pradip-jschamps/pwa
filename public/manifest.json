@@ -1,7 +1,7 @@
 {
-    "name": "My Next.js PWA App",
-    "short_name": "NextPWA",
-    "description": "A progressive web app built with Next.js and TypeScript.",
+    "name": "BPG College",
+    "short_name": "BPG",
+    "description": "BPG College app",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
