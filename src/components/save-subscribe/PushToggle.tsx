@@ -1,53 +1,51 @@
-"use client"
-import React, { useState } from 'react';
-import { useFCM } from '../../utils/useFCM';
+"use client";
 
-export default function PushToggle({ backendUrl, jwt }: { backendUrl: string; jwt?: string }) {
+import React, { useState } from "react";
+import { useFCM } from "@/utils/useFCM";
+import { useFcmContext } from "../../context/FcmContext";
+
+export default function PushToggle() {
   const { subscribe, unsubscribe } = useFCM();
-  const [token, setToken] = useState<string | null>(null);
-  const [status, setStatus] = useState<'idle'|'subscribing'|'subscribed'|'error'>('idle');
+  const { fcmToken, setFcmToken } = useFcmContext();
+
+  const [status, setStatus] = useState<"idle" | "subscribed" | "unsubscribed">("idle");
 
   const handleSubscribe = async () => {
     try {
-      setStatus('subscribing');
-      const t = await subscribe(backendUrl, jwt);
-      setToken(t as string);
-      setStatus('subscribed');
-      alert('Subscribed (FCM token saved)');
-    } catch (err: unknown) {
-      console.error(err);
-      setStatus("error")
-      const message =
-        err instanceof Error ? err.message : JSON.stringify(err);
+      const token = await subscribe();
 
-      alert("Subscribe failed: " + message);
+      if (!token) {
+        alert("No token generated");
+        return;
+      }
+
+      setFcmToken(token);
+      setStatus("subscribed");
+    } catch (err) {
+      console.error(err);
     }
   };
 
   const handleUnsubscribe = async () => {
-    if (!token) {
-      alert('No token saved locally');
+    if (!fcmToken) {
+      alert("No token stored");
       return;
     }
-    try {
-      await unsubscribe(backendUrl, token, jwt);
-      setToken(null);
-      setStatus('idle');
-      alert('Unsubscribed');
-    } catch (err: unknown) {
-      console.error(err);
 
-      const message =
-        err instanceof Error ? err.message : JSON.stringify(err);
-
-      alert("Unsubscribe failed: " + message);
-    }
+    await unsubscribe(fcmToken);
+    setFcmToken(null);
+    setStatus("unsubscribed");
   };
 
   return (
-    <div className='py-16 px-4 flex flex-col items-center '>
-      <p>Push status: <span className='text-gray-600'>{status}</span></p>
-      {!token ? <button onClick={handleSubscribe} className='bg-gray-600 hover:bg-gray-700 px-4 py-1 rounded text-white cursor-pointer'>Subscribe (FCM)</button> : <button onClick={handleUnsubscribe} className='bg-gray-600 hover:bg-gray-700 px-4 py-1 rounded text-white cursor-pointer'>Unsubscribe</button>}
+    <div className="mt-16 flex flex-col justify-center items-center">
+      <p className=" mb-4">FCM Token: <span className="text-gray-600">{fcmToken ?? "Not generated"}</span></p>
+
+      {status !== "subscribed" ? (
+        <button onClick={handleSubscribe} className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-1 rounded cursor-pointer">Enable Push</button>
+      ) : (
+        <button onClick={handleUnsubscribe} className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-1 rounded cursor-pointer">Disable Push</button>
+      )}
     </div>
   );
 }
